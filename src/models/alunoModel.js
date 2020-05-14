@@ -32,7 +32,13 @@ class Aluno extends Sequelize.Model {
             foreignKey: 'user_id',
             as: 'contacts'
         })
+    }
 
+    comparePassword(password, hashedPassword) {
+        console.log('before compare')
+        const compare = bcrypt.compareSync(password, hashedPassword);
+        console.log(compare);
+        return compare;
     }
 
     passwordHash(password) {
