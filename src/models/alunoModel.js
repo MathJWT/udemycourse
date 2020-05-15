@@ -14,6 +14,7 @@ class Aluno extends Sequelize.Model {
             password: Sequelize.STRING,
         },{
             sequelize,
+            paranoid: true,
         });
         return this;
     };

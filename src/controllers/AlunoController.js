@@ -29,16 +29,18 @@ module.exports = () => {
 
     const delet = async (req, res) => {
         const user_id = req.params.user_id;
-        const user = await User.findByPk(user_id);
+        const user = await User.findByPk(user_id, { paranoid: false });
         
         if (!user) return res.status(401).json({Error: 'User not found'});
 
         const deleted = await User.destroy({
             where: {
                 id: user_id
-            }
+            },
+            
+        //  force: true, //deletar valendo o file
         }) 
-
+        console.log(deleted)
         res.json(deleted)
     };
 
