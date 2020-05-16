@@ -13,7 +13,6 @@ module.exports = () => {
                 email: user_email,
             }
         });;
-        console.log(userExists)
         if (userExists) return res.status(400).json({error: 'Patient not found!'});        
      
         password = user.passwordHash(password);
@@ -28,8 +27,8 @@ module.exports = () => {
     }
 
     const delet = async (req, res) => {
-        const user_id = req.params.user_id;
-        const user = await User.findByPk(user_id, { paranoid: false });
+        const user_id = req.userId;
+        const user = await User.findByPk(user_id, { paranoid: false }); //Paranoid:false, in order to find the users that were soft deleted
         
         if (!user) return res.status(401).json({Error: 'User not found'});
 
@@ -45,10 +44,12 @@ module.exports = () => {
     };
 
     const show = async (req, res) => {
-        const user_id = req.params.user_id;
+        const user_id = req.userId;
         const user = await User.findByPk(user_id, {
             attributes: ['name', 'email', 'age']
-        });
+        }); 
+        console.log('USER_EMAIL: ' + req.userEmail)
+        console.log('USER_EMAIL: ' + req.userId)
 
         if (!user) return res.status(401).json({Error: "User not found!"})
 
@@ -57,9 +58,9 @@ module.exports = () => {
 
     const update = async (req, res) => {
         const userClass = new User(req.body)
-        const user_id = req.params.user_id;
+        const user_id = req.userId;
         const previousPassword = req.body.senhaAtual;
-        const { name, email, age } = req.body;
+        const { name, email = req.userEmail, age } = req.body;
         let password = req.body.password;
 
         const user = await User.findByPk(user_id, {

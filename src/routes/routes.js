@@ -5,11 +5,11 @@ const alunoController = require('../controllers/AlunoController')();
 const addressController = require("../controllers/AddressController")();
 const techController = require('../controllers/TechController')();
 const contactController = require('../controllers/ContactController')();
-
+const tokenController = require('../controllers/tokenController')();
+const middlewareGlobal = require('../middlewares/globalMiddleware')();
 module.exports = route
 //HomeRoutes
 route.get('/', homeController.index);
-route.post('/users/create', alunoController.store);
 
 // //Addresses Routes
 // route.post('/user/:user_id/address', addressController.insertAddress);
@@ -21,7 +21,11 @@ route.post('/users/create', alunoController.store);
 // route.post('/users/:user_id/techs', techController.insertTechonology);
 // route.delete('/users/:user_id/techs', techController.deleteTechnology);
 
+// Token Routes
+route.post("/tokens/:user_id", tokenController.store);
+
 //User Routes
-route.get('/users/:user_id/read', alunoController.show);
-route.delete('/users/:user_id/delete', alunoController.delet);  
-route.put('/users/:user_id/update', alunoController.update)
+route.post('/user/create', alunoController.store);
+route.get('/users/:user_id/read', [middlewareGlobal.loginRequired], alunoController.show);
+route.delete('/users/:user_id/delete', [middlewareGlobal.loginRequired], alunoController.delet);  
+route.put('/users/:user_id/update', [middlewareGlobal.loginRequired], alunoController.update)
