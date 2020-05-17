@@ -1,0 +1,41 @@
+[33mcommit cebfd73f868f1b0535a333c5e8ba033bfe7f8f65[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31mapirest/newFunctionality[m[33m, [m[1;32mnewFunctionality[m[33m)[m
+Author: Matheus Ribeiro <matheus.ribeiro@amigoapp.com.br>
+Date:   Sat May 16 22:43:42 2020 -0300
+
+    new functionality
+
+[33mcommit 04908c2ecd8c7a4d966459e932803d0cf71a181d[m
+Author: Matheus Ribeiro <matheus.ribeiro@amigoapp.com.br>
+Date:   Sat May 16 22:11:06 2020 -0300
+
+    Inserted the new relationship N:N - companies and users.
+
+[33mcommit 759e4fa181fd348e816a2e83de0e80d2b8d60849[m[33m ([m[1;31mapirest/master[m[33m)[m
+Author: Matheus Ribeiro <matheus.ribeiro@amigoapp.com.br>
+Date:   Sat May 16 13:23:29 2020 -0300
+
+    Inserted JWT into the application.
+
+[33mcommit d5f37d74f8bec56b6b7e06734e3192b6e12470f1[m
+Author: Matheus Ribeiro <matheus.ribeiro@amigoapp.com.br>
+Date:   Fri May 15 08:15:48 2020 -0300
+
+    Added the updated
+
+[33mcommit 57312be2464a8a9682ffb9259774beec10cc43d4[m
+Author: Matheus Ribeiro <matheus.ribeiro@amigoapp.com.br>
+Date:   Thu May 14 21:55:18 2020 -0300
+
+    Included the new feature of updating users.
+
+[33mcommit 17f64001493258e0f1e37d0b42953dbab5506863[m
+Author: Matheus Ribeiro <matheus.ribeiro@amigoapp.com.br>
+Date:   Thu May 14 00:26:33 2020 -0300
+
+    Created the show, delete and create methods.
+
+[33mcommit 5d42503d2083710242173b171dc73fc66fcac529[m
+Author: Matheus Ribeiro <matheus.ribeiro@amigoapp.com.br>
+Date:   Wed May 13 22:47:15 2020 -0300
+
+    Thats my initial commit
