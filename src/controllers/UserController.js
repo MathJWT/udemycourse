@@ -1,4 +1,4 @@
-const User = require('../models/alunoModel');
+const User = require('../models/userModel');
 
 module.exports = () => {
     const store = async (req, res) => {
@@ -13,15 +13,18 @@ module.exports = () => {
                 email: user_email,
             }
         });;
+
         if (userExists) return res.status(400).json({error: 'Patient not found!'});        
      
         password = user.passwordHash(password);
-        const newUser = await User.create({
-            name,
-            email: user_email,
-            age,
-            password,
-        })
+        const newUser = await User.create(
+            {
+                name,
+                email: user_email,
+                age,
+                password,
+            }
+        )
 
         return res.json(newUser);
     }
@@ -35,21 +38,26 @@ module.exports = () => {
         const deleted = await User.destroy({
             where: {
                 id: user_id
-            },
-            
-        //  force: true, //deletar valendo o file
+            },    
+        //  force: true, //deletar valendo o file -- paranoid:true
         }) 
         console.log(deleted)
         res.json(deleted)
     };
 
     const show = async (req, res) => {
-        const user_id = req.userId;
+        const { user_id }= req.params;
+        
         const user = await User.findByPk(user_id, {
-            attributes: ['name', 'email', 'age']
+            attributes: ['name', 'email', 'age'],
+            include: { 
+                association: 'companies',
+                attributes: ['id', 'name'],
+                through: {
+                    attributes: [] //Estou fazendo o "members", que seria o through n retornar nada na request
+                }
+            }
         }); 
-        console.log('USER_EMAIL: ' + req.userEmail)
-        console.log('USER_EMAIL: ' + req.userId)
 
         if (!user) return res.status(401).json({Error: "User not found!"})
 
@@ -68,8 +76,7 @@ module.exports = () => {
         });
 
         if (!user) return res.status(404).json({Error: 'User not found!'});
-        
-        //password          hashed password                  
+                                //password         hashed password                  
         if (!user.comparePassword(previousPassword, user.password)) return res.status(404).json({Error: 'User not found!'});
 
         password = userClass.passwordHash(password)

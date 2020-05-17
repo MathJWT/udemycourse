@@ -1,53 +1,40 @@
 const Sequelize = require('sequelize');
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 
-class Aluno extends Sequelize.Model {
+class User extends Sequelize.Model {
     consctructor(body) {
         this.body = body;
     }
-    
+
     static init(sequelize) {
         super.init({
             name: Sequelize.STRING,
-            age: Sequelize.INTEGER,
+            age: Sequelize.DATE,
             email: Sequelize.STRING,
             password: Sequelize.STRING,
         },{
             sequelize,
             paranoid: true,
+            tableName: 'users'
         });
         return this;
     };
 
     static Associate(models) {
-        this.hasMany(models.Address, {
-            foreignKey: 'user_id',
-            as: 'addresses'
-        });
-        this.belongsToMany(models.Tech, {
-            foreignKey: 'user_id',
-            through: 'user_techs',
-            as: 'tech'
-        });
-        this.hasMany(models.Contact, {
-            foreignKey: 'user_id',
-            as: 'contacts'
-        })
+        this.belongsToMany(models.Company, { foreignKey: 'user_id', through: 'members', as: 'companies' })
     }
 
     comparePassword(password, hashedPassword) {
-        console.log('before compare')
         const compare = bcrypt.compareSync(password, hashedPassword);
-        console.log(compare);
         return compare;
-    }
+    };
 
     passwordHash(password) {
         const userPassword = password;
-        const salt = bcrypt.genSaltSync();
+        const salt = bcrypt.genSaltSync(); 
         const hashPassword = bcrypt.hashSync(userPassword, salt);
-        return hashPassword
-    }
-}
+        return hashPassword;
+    };
+};
 
-module.exports = Aluno;
+module.exports = User;
