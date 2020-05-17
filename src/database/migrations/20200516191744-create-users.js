@@ -24,15 +24,20 @@ module.exports = {
             type: Sequelize.STRING,
             allowNull: false,
         },
-        createdAt: {
+        created_at: {
             allowNull: false,
             type: Sequelize.DATE,
             defaultValue: new Date(),
         },
-        updatedAt: {
+        updated_at: {
             allowNull: false,
             type: Sequelize.DATE,
             defaultValue: new Date()
+        },
+        deleted_at: {
+            allowNull: true,
+            type: Sequelize.DATE,
+            defaultValue: null,
         }
       });
   },

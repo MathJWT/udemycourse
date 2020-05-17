@@ -1,5 +1,6 @@
 require('dotenv').config();
 const jwt = require("jsonwebtoken");
+const User = require('../models/userModel');
 module.exports = () => {
     const loginRequired = (req, res, next) => {
         const {authorization} = req.headers
@@ -8,6 +9,15 @@ module.exports = () => {
         
         try {
             const user_data = jwt.verify(token, process.env.TOKEN_SECRET)
+            const isValid = User.findOne({
+                where: {
+                    email: user_data.email,
+                    id: user_data.email
+                }
+            })
+
+            if (!isValid) return res.status(401).json({Error: 'Invalid token!'})
+
             req.userId = user_data.id; 
             req.userEmail = user_data.email;
             return next();

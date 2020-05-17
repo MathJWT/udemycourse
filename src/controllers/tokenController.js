@@ -1,6 +1,7 @@
 require('dotenv').config();
-const User = require("../models/alunoModel");
+const User = require("../models/userModel");
 const jwt = require('jsonwebtoken');
+
 module.exports = () => {
     const store = async (req, res) => {
         const userModel = new User(req.body)
