@@ -4,7 +4,7 @@ module.exports = () => {
     const store = async (req, res) => {
         const user = new User(req.body);        
         const name = req.body.name;
-        const age = req.body.age
+        const age = req.body.age;
         const user_email = req.body.email;
         let password = req.body.password;
 
@@ -14,7 +14,7 @@ module.exports = () => {
             }
         });;
 
-        if (userExists) return res.status(400).json({error: 'Patient not found!'});        
+        if (userExists) return res.status(400).json({error: 'User existent!'});        
      
         password = user.passwordHash(password);
         const newUser = await User.create(
@@ -62,7 +62,7 @@ module.exports = () => {
         if (!user) return res.status(401).json({Error: "User not found!"})
 
         res.json(user)
-    }
+    };
 
     const update = async (req, res) => {
         const userClass = new User(req.body)
@@ -70,13 +70,11 @@ module.exports = () => {
         const previousPassword = req.body.senhaAtual;
         const { name, email = req.userEmail, age } = req.body;
         let password = req.body.password;
-
         const user = await User.findByPk(user_id, {
             attributes: ['name', 'email', 'age']
         });
 
-        if (!user) return res.status(404).json({Error: 'User not found!'})                  
-        if (!user.comparePassword(previousPassword, user.password)) return res.status(404).json({Error: 'User not found!'});
+        if (!user || !user.comparePassword(previousPassword, user.password)) return res.status(404).json({Error: 'User not found!'});
 
         password = userClass.passwordHash(password)
 
