@@ -72,11 +72,10 @@ module.exports = () => {
         let password = req.body.password;
 
         const user = await User.findByPk(user_id, {
-            attributes: ['name', 'email', 'age', 'password']
+            attributes: ['name', 'email', 'age']
         });
 
-        if (!user) return res.status(404).json({Error: 'User not found!'});
-                                //password         hashed password                  
+        if (!user) return res.status(404).json({Error: 'User not found!'})                  
         if (!user.comparePassword(previousPassword, user.password)) return res.status(404).json({Error: 'User not found!'});
 
         password = userClass.passwordHash(password)
