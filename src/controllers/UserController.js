@@ -70,6 +70,7 @@ module.exports = () => {
         const previousPassword = req.body.senhaAtual;
         const { name, email, age} = req.body;
         let password = req.body.password;
+
         const user = await User.findByPk(user_id, { 
             attributes: ['name', 'email', 'age', 'password']
         });
@@ -78,7 +79,7 @@ module.exports = () => {
 
         if (!userClass.comparePassword(previousPassword, user.password)) return res.status(404).json({Error: 'Incorrect password!'});
 
-        password = userClass.passwordHash(password)
+        password = userClass.passwordHash(password);
 
         const updation = await user.update({
             id: user_id,
@@ -86,10 +87,10 @@ module.exports = () => {
             age,
             email,
             password,
-        })
-        console.log(updation)
-        res.json(updation)
-    }
+        });
+
+        res.json(updation);
+    };
 
     return {
         store,

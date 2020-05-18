@@ -9,7 +9,8 @@ module.exports = () => {
 
     const index = async (req, res) => {
         const patients = await Patient.findAll({
-            attributes: ['id','name', 'email', 'age', 'cpf', 'company_id']
+            attributes: ['id','name', 'email', 'age', 'cpf', 'company_id'],
+            include: { association: 'patient-pictures' }
         });
 
         if (!patients) return res.stauts(401).json({Error: "Patients not found!"})

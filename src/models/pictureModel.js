@@ -4,10 +4,8 @@ const validator = require('validator');
 class Picture extends Sequelize.Model {
     static init(sequelize) {
         super.init({
-            name: Sequelize.STRING,
-            age: Sequelize.INTEGER,
-            email: Sequelize.STRING,
-            cpf: Sequelize.STRING,
+            originalname: Sequelize.STRING,
+            filename: Sequelize.STRING,
         },{
             sequelize,
             paranoid: true,
