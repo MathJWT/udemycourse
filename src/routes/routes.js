@@ -4,6 +4,7 @@ const userController = require('../controllers/UserController')();
 const tokenController = require('../controllers/tokenController')();
 const middlewareGlobal = require('../middlewares/globalMiddleware')();
 const companyController = require('../controllers/companyController')();
+const patientController = require("../controllers/patientController")();
 
 module.exports = route
 
@@ -20,5 +21,12 @@ route.get("/company/:company_id", companyController.show)
 //User Routes
 route.post('/user/create', userController.store);
 route.get('/users/:user_id/read', userController.show);
-route.delete('/users/:user_id/delete', [middlewareGlobal.loginRequired], userController.delet);  
-route.put('/users/:user_id/update', [middlewareGlobal.loginRequired], userController.update)
+route.delete('/users/:user_id/delete', userController.delet);  
+route.put('/users/:user_id/update', userController.update);
+
+//Patient Routes
+route.post('/patient/create/:company_id', patientController.store);
+route.get('/patients/index', patientController.index);
+route.get('/patient/:patient_id/read', patientController.show);
+route.put('/patient/:patient_id/update', patientController.update);
+route.delete('/patient/:patient_id/delete', patientController.delet);

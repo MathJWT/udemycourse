@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 
 module.exports = () => {
     const store = async (req, res) => {
-        const user = new User(req.body);        
+        const user = new User(req.body);
         const name = req.body.name;
         const age = req.body.age;
         const user_email = req.body.email;
@@ -30,9 +30,9 @@ module.exports = () => {
     }
 
     const delet = async (req, res) => {
-        const user_id = req.userId;
+        const user_id = req.params.user_id;
         const user = await User.findByPk(user_id, { paranoid: false }); //Paranoid:false, in order to find the users that were soft deleted
-        
+
         if (!user) return res.status(401).json({Error: 'User not found'});
 
         const deleted = await User.destroy({
@@ -65,30 +65,29 @@ module.exports = () => {
     };
 
     const update = async (req, res) => {
-        const userClass = new User(req.body)
-        const user_id = req.userId;
+        const userClass = new User(req.body)    
+        const { user_id } = req.params;
         const previousPassword = req.body.senhaAtual;
-        const { name, email = req.userEmail, age } = req.body;
+        const { name, email, age} = req.body;
         let password = req.body.password;
-        const user = await User.findByPk(user_id, {
-            attributes: ['name', 'email', 'age']
+        const user = await User.findByPk(user_id, { 
+            attributes: ['name', 'email', 'age', 'password']
         });
 
-        if (!user || !user.comparePassword(previousPassword, user.password)) return res.status(404).json({Error: 'User not found!'});
+        if (!user) return res.status(401).json({Error: 'User not found!'});
+
+        if (!userClass.comparePassword(previousPassword, user.password)) return res.status(404).json({Error: 'Incorrect password!'});
 
         password = userClass.passwordHash(password)
 
-        const updation = await User.update({
+        const updation = await user.update({
+            id: user_id,
             name,
             age,
             email,
             password,
-        }, {
-            where: {
-                id: user_id
-            }
         })
-
+        console.log(updation)
         res.json(updation)
     }
 

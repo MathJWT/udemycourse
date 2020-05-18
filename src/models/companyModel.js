@@ -18,6 +18,7 @@ class Company extends Sequelize.Model {
 
     static Associate(models) {
         this.belongsToMany(models.User, { foreignKey: 'company_id', through: 'members', as: 'users' })
+        this.hasMany(models.Patient, {foreignKey: 'company_id', as: 'company-patients'})
     }
 
 }

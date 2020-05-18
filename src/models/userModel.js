@@ -2,14 +2,11 @@ const Sequelize = require('sequelize');
 const bcrypt = require("bcrypt");
 
 class User extends Sequelize.Model {
-    consctructor(body) {
-        this.body = body;
-    }
 
     static init(sequelize) {
         super.init({
             name: Sequelize.STRING,
-            age: Sequelize.DATE,
+            age: Sequelize.INTEGER,
             email: Sequelize.STRING,
             password: Sequelize.STRING,
         },{
