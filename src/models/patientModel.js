@@ -18,6 +18,7 @@ class Patient extends Sequelize.Model {
 
     static Associate(models) {
         this.belongsTo(models.Company, {foreignKey: 'company_id', as: 'patient-companies'})
+        this.hasMany(models.Picture, { foreignKey: 'company_id', as: 'patient-pictures' })
     };
 
     validFields(patient_name, patient_email, patient_age) {
