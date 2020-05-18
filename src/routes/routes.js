@@ -5,8 +5,13 @@ const tokenController = require('../controllers/tokenController')();
 const middlewareGlobal = require('../middlewares/globalMiddleware')();
 const companyController = require('../controllers/companyController')();
 const patientController = require("../controllers/patientController")();
+const pictureController = require("../controllers/pictureController")();
 
 module.exports = route
+//configs
+// const multer = require('multer');
+// const multerConfig = require('../config/multerConfig');
+// const upload = multer(multerConfig);
 
 // Token Routes
 route.post("/tokens/:user_id", tokenController.store);
@@ -30,3 +35,6 @@ route.get('/patients/index', patientController.index);
 route.get('/patient/:patient_id/read', patientController.show);
 route.put('/patient/:patient_id/update', patientController.update);
 route.delete('/patient/:patient_id/delete', patientController.delet);
+
+//Picture Routes
+route.post('/picture/upload', pictureController.store);
