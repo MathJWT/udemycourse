@@ -37,4 +37,8 @@ route.put('/patient/:patient_id/update', patientController.update);
 route.delete('/patient/:patient_id/delete', patientController.delet);
 
 //Picture Routes
+route.get('/picture/index', pictureController.index);
+route.get('/picture/:picture_id/show', pictureController.show)
 route.post('/picture/:patient_id/upload', pictureController.store);
+route.delete('/picture/:patient_id/delete', pictureController.delet);
+route.put('/picture/:patient_id/update/:picture_id', pictureController.update)

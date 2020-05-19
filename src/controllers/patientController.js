@@ -4,13 +4,25 @@ const Op = require('sequelize').Op;
 
 module.exports = () => {
     const show = async (req, res) => {
+        const {patient_id} = req.params;
+        const patient = await Patient.findByPk(patient_id, {
+            include: {
+                association: 'patient-pictures',
+                attributes: ['id', 'originalname', 'filename']
+            }
+        });
+        if (!patient) return res.status(401).json({Error: 'Patient not found!'})
 
+        res.json(patient)
     };
 
     const index = async (req, res) => {
         const patients = await Patient.findAll({
             attributes: ['id','name', 'email', 'age', 'cpf', 'company_id'],
-            include: { association: 'patient-pictures' }
+            include: {
+                association: 'patient-pictures',
+                attributes: ['id', 'originalname', 'filename']
+            }
         });
 
         if (!patients) return res.stauts(401).json({Error: "Patients not found!"})
@@ -71,15 +83,15 @@ module.exports = () => {
 
         const valid = patientClass.validFields(name, email, age);
 
-        if(!valid) return res.status(401).json({Error: 'Fields invalid!'})
+        if(!valid) return res.status(401).json({Error: 'Fields invalid!'});
 
         const patient = await Patient.create({
             company_id,
-            name: name,
+            name,
             email,
             cpf,
             age
-        })
+        });
         
         return res.json(patient);
     };
