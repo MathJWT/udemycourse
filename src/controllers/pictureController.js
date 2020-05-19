@@ -120,8 +120,13 @@ module.exports = () => {
         const picture = Picture.findByPk(picture_id, {
             attributes: ['id', 'originalname', 'filename']
         })
-        .then(data => res.json(data))
+        .then(data => getData(data))
         .catch(e => res.json(e));
+        
+        function getData(data) {
+            return res.json(data);
+        };
+
         return
     }
 
