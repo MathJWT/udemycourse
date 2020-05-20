@@ -102,21 +102,23 @@ module.exports = () => {
 
     const index = (req, res) => {
         const pictures = Picture.findAll({
-            attributes: ['id', 'filename', 'originalname']
+            attributes: ['id', 'filename', 'originalname'],
+            raw: true, //Basically if that is set true it will just return the data we want, not the metadata, that would get a large amount of space.
         }) 
 
         if (pictures.length == 0) return res.status(401).json({Error: "There insn't any picture."}) 
         
-        pictures
-        .then(data =>  res.json(data))
+        pictures.then(data =>  {
+            console.log(data)
+            res.json(data)
+        })
         .catch(e => res.json(e));
         
         return
     };
 
     const show = (req, res) => {
-        const { picture_id } = req.params;
-        
+        const { picture_id } = req.params; 
         const picture = Picture.findByPk(picture_id, {
             attributes: ['id', 'originalname', 'filename']
         })

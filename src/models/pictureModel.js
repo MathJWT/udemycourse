@@ -16,7 +16,7 @@ class Picture extends Sequelize.Model {
         },{
             sequelize,
             paranoid: true,
-            tableName: 'pictures'
+            tableName: 'pictures',
         });
         return this;
     };
