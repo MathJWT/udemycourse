@@ -74,7 +74,6 @@ module.exports = () => {
     const delet = async (req, res) => {
         const { patient_id }  = req.params;
         const { picture_id } = req.body;
-
         const patient = await Patient.findByPk(patient_id, {
             include: {
                 association: 'patient-pictures',
@@ -92,7 +91,7 @@ module.exports = () => {
 
         for (let index = 0; index < patientPics.length; index   ++) {
             if (patientPics[index].id == picture_id) {
-                  await picture.destroy();
+                await picture.destroy();
                 return res.json(null)
             }
         }

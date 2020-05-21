@@ -6,6 +6,7 @@ const middlewareGlobal = require('../middlewares/globalMiddleware')();
 const companyController = require('../controllers/companyController')();
 const patientController = require("../controllers/patientController")();
 const pictureController = require("../controllers/pictureController")();
+const attendanceController = require("../controllers/attendanceController")();
 
 module.exports = route
 //configs
@@ -38,7 +39,14 @@ route.delete('/patient/:patient_id/delete', patientController.delet);
 
 //Picture Routes
 route.get('/picture/index', pictureController.index);
-route.get('/picture/:picture_id/show', pictureController.show)
+route.get('/picture/:picture_id/show', pictureController.show);
 route.post('/picture/:patient_id/upload', pictureController.store);
 route.delete('/picture/:patient_id/delete', pictureController.delet);
-route.put('/picture/:patient_id/update/:picture_id', pictureController.update)
+route.put('/picture/:patient_id/update/:picture_id', pictureController.update);
+
+//Atendance routes
+route.post('/attendance/:patient_id/store', attendanceController.store);
+route.put('/attendance/:attendance_id/update', attendanceController.update);
+route.get('/attendance/:attendance_id/show', attendanceController.show);
+route.get('/attendance/index', attendanceController.index);
+route.delete('/attendance/:attendance_id/delete', attendanceController.delet);
