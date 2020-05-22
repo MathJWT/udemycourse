@@ -126,7 +126,7 @@ module.exports = () => {
             return res.json(data);
         };
 
-        return
+        return;
     }
 
     return {
@@ -136,4 +136,4 @@ module.exports = () => {
         index,
         update
     }
-}
+};

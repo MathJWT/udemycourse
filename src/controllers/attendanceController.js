@@ -11,11 +11,11 @@ module.exports = () => {
             find_patient: (done) => {
                 Patient.findByPk(patient_id, { raw: true })
                 .then(response => done(null, response))
-                .catch(err => done(err))
+                .catch(err => done(err));
             },
             patientExists: ['find_patient', (done, results) => {
                 if (!results.find_patient) return res.json({Error: "Patient not found!"});    
-                
+
                 done(null, true);
             }],
             createAttendance: ['find_patient', 'patientExists', ( done, results) => {
@@ -46,13 +46,15 @@ module.exports = () => {
                 .then(response => done(null, response))
                 .catch(err => done(err));
             },
-            show: ['findAll', (results, done) => {
+            show: ['findAll', (done, reults) => {
                 const result = results.findAll;
-                if (result.length == 0) return res.json({Err: 'Results not found!'});
+                if (result.length == 0) {
+                    done(true);
+                    return res.json({Error: "Results weren't found!"})
+                }
                 
                return res.json(result);
             }]
-        
         })
     };
     
@@ -166,7 +168,7 @@ module.exports = () => {
                 .catch(err => done(err)); 
             },
             show: ['find', (done, results) => {
-                const data = (resuts.find);
+                const data = (results.find);
                 if (!data) {
                     done(true);
                     return res.json({Err:"Attendance not found!"});

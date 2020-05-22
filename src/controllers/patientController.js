@@ -1,19 +1,32 @@
 const Patient = require('../models/patientModel');
 const Company = require('../models/companyModel');
 const Op = require('sequelize').Op;
+const async = require('async');
 
 module.exports = () => {
-    const show = async (req, res) => {
-        const {patient_id} = req.params;
-        const patient = await Patient.findByPk(patient_id, {
-            include: {
-                association: 'patient-pictures',
-                attributes: ['id', 'originalname', 'filename']
-            }
-        });
-        if (!patient) return res.status(401).json({Error: 'Patient not found!'})
-
-        res.json(patient)
+    
+    const show = (req, res) => {
+        const { patient_id } = req.params;
+        async.auto({
+            find: (done) => {
+                Patient.findByPk(patient_id, {
+                    include: {
+                        association: 'patient-pictures'
+                    }
+                })
+                .then(resp => done(null, resp))
+                .catch(err => done(err)); 
+            },
+            show: ['find', (done, results) => {
+                const data = (results.find);
+                if (!data) {
+                    done(true);
+                    return res.json({Err:"Patient not found!"});
+                }
+                done(null, true);
+                return res.json(data);
+            }]
+        })
     };
 
     const index = async (req, res) => {
@@ -24,7 +37,7 @@ module.exports = () => {
                 attributes: ['id', 'originalname', 'filename']
             }
         });
-
+        
         if (!patients) return res.stauts(401).json({Error: "Patients not found!"})
         
         return res.json(patients);
@@ -37,34 +50,85 @@ module.exports = () => {
 
         if (!find_patient) return res.status(401).json({Error: 'Patient not found!'});
     
-        await find_patient.destroy();
+        await Patient.destroy({
+            where: {
+                id: patient_id
+            }
+        });
             // force: true - tem que jogar um objeto no destroy // deletar full
-
-
-        return res.json(null)
+        return res.json(null);
     };
-
-    const update = async (req, res) => {
+    const update = (req, res) => {
         const { patient_id } = req.params;
-        const patientClass = new Patient(req.body);
-        const { name, email, age } = req.body;
-        const patient = await Patient.findByPk(patient_id);
+        let { name = null, email = null, cpf = null, age = null } = req.body;
+        const previousPatientData = [ name, email, cpf, age];
 
-        if (!patient) return res.status(401).json({Error: 'Patient not found!'});
+        async.auto({
+            findPatient: (done) => {
+                Patient.findByPk(patient_id, { raw: true })
+                .then(response => done(null, response))
+                .catch(err => done(err))
+            },
+            validFields: ['findPatient', (done, results) => {
+                if (!results.findPatient){ 
+                console.log(results.findPatient)
+                done(true);
+                return res.json({Error: 'Patient not found!'})
+            };
+                const previousName = results.findPatient.name;
+                const previousEmail = results.findPatient.email;
+                const previousCpf = results.findPatient.cpf;
+                const previousAge = results.findPatient.age;
 
-        const validate = patientClass.validFields(name, email, age);
-        
-        if(!validate) return res.status(401).json({Error: "Fields aren't well filled."})
+                const attendanceData = [previousName, previousEmail, previousCpf, previousAge];
+            
+                done(null, attendanceData);
+                }],
+            update: ['findPatient', 'validFields', (done, results) => {
+                if (!results.findPatient || !results.validFields.length > 0) return res.status(401).json({Err: 'Attendance or the fields are invalid!'});
+                
+                for (let index = 0; index < previousPatientData.length; index++) {
+                    if (index == 0 && !previousPatientData[0]) {
+                        name = results.validFields[0];
+                    };
+                    
+                    if (index == 1 && !previousPatientData[1]) {
+                        email = results.validFields[1];
+                    };
+                    
+                    if (index == 2 && !previousPatientData[2]) {
+                        cpf = results.validFields[2];
+                    }; 
 
-        const update = patient.update({ 
-            name,
-            email,
-            cpf: patient.cpf,
-            age
-        })        
-        
-        return res.json(update)
-    };
+                    if (index == 3 && !previousPatientData[3]) {
+                        age = results.validFields[3];
+                    }; 
+                };
+
+                Patient.update({
+                    name,
+                    email,
+                    cpf,
+                    age
+                }, {
+                where: {
+                    id: patient_id
+                }                    
+                })
+                .then(response => done(null, response))
+                .catch((err) => done(err));
+                }],
+                showData: ['update',(done, results) => {
+                    if (!results.update) {
+                        done(true);
+                        return;
+                    };
+
+                    done(null, true);
+                    return res.json(results.update);
+                }]
+            })
+        };
 
     const store = async (req, res) => {
         const patientClass = new Patient(req.body);

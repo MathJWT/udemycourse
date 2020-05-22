@@ -97,5 +97,5 @@ module.exports = () => {
         delet,
         show,
         update
-    }
+    };
 }

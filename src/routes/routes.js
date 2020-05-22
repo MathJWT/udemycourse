@@ -7,6 +7,7 @@ const companyController = require('../controllers/companyController')();
 const patientController = require("../controllers/patientController")();
 const pictureController = require("../controllers/pictureController")();
 const attendanceController = require("../controllers/attendanceController")();
+const insuranceController = require("../controllers/insuranceController")();
 
 module.exports = route
 //configs
@@ -50,3 +51,16 @@ route.put('/attendance/:attendance_id/update', attendanceController.update);
 route.get('/attendance/:attendance_id/show', attendanceController.show);
 route.get('/attendance/index', attendanceController.index);
 route.delete('/attendance/:attendance_id/delete', attendanceController.delet);
+
+//Insurance routes
+route.post('/insurance/store', insuranceController.store);
+
+route.put('/insurance/:attendance_id/update', insuranceController.update);
+
+route.get('/insurance/:insurance_id/show', insuranceController.show);
+route.get('/insurance/index', insuranceController.index);
+route.delete('/attendance/:attendance_id/delete', insuranceController.delet);
+// route.post('/insurance/insert/:patient_id'); 
+// route.post('/insurance/insert/:attendance_id');
+// route.put('/insurance/:attendance_id/update', attendanceController.updateAttendance);
+// route.put('/insurance/:attendance_id/update', attendanceController.updatePatient);

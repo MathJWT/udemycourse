@@ -27,6 +27,13 @@ module.exports = {
                 allowNull: false,
                 defaultValue: new Date()
             },
+            insurance_id: {
+                allowNull: true,
+                type: Sequelize.INTEGER,
+                references: { model: 'insurance', key: 'id' },
+                onUpdate: 'CASCADE',
+                onDelete: 'CASCADE'
+            },
             created_at: {
                 allowNull: false,
                 type: Sequelize.DATE,

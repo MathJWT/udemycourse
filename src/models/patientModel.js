@@ -25,16 +25,18 @@ class Patient extends Sequelize.Model {
         const name = patient_name;
         const email = patient_email;
         const age = patient_age;
-        let valid = true
+        let valid = true;
+
+        if (!age || !name || !email) valid = false;
 
         if (age && typeof age !== 'number') valid = false;
 
         if (email && !validator.default.isEmail(email)) valid = false;
 
-        if (name.trim().length <= 5) valid = false;
-        console.log('validei full')
+        if (name && name.trim().length <= 5) valid = false;
 
-        return valid
+
+        return valid;
     }
 
 };
