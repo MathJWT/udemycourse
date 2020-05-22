@@ -16,7 +16,7 @@ class Picture extends Sequelize.Model {
         },{
             sequelize,
             paranoid: true,
-            tableName: 'pictures'
+            tableName: 'pictures',
         });
         return this;
     };
@@ -24,7 +24,6 @@ class Picture extends Sequelize.Model {
     static Associate(models) {
         this.belongsTo(models.Patient, {foreignKey: 'patient_id', as: 'picture-patients'})
     };
-
 };
 
 module.exports = Picture;

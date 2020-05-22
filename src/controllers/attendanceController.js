@@ -83,6 +83,7 @@ module.exports = () => {
             update: ['findAttendance', 'validFields', (done, results) => {
                 if (!results.findAttendance || !results.validFields.length > 0) return res.status(401).json({Err: 'Attendance or the fields are invalid!'});
                 console.log('cheguei aqui, pai')
+                
                 for (let index = 0; index < previousAttendanceData.length; index++) {
                     if (index == 0 && !previousAttendanceData[0]) {
                         date = results.validFields[0];
