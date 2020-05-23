@@ -42,11 +42,13 @@ module.exports = () => {
     const index = (req, res) => {
         async.auto({
             findAll: (done) => {
-                Attendance.findAll({raw: true})
+                Attendance.findAndCountAll({
+                    limit: 11,
+                })
                 .then(response => done(null, response))
                 .catch(err => done(err));
             },
-            show: ['findAll', (done, reults) => {
+            show: ['findAll', (done, results) => {
                 const result = results.findAll;
                 if (result.length == 0) {
                     done(true);
@@ -120,8 +122,9 @@ module.exports = () => {
 
                     return res.json(results.update);
                 }]
-            })
-        };
+            }
+        )
+    };
 
     const delet = (req, res) => {
         const { attendance_id } = req.params;
@@ -159,6 +162,8 @@ module.exports = () => {
         })
     };
 
+    
+
     const show = (req, res) => {
         const { attendance_id } = req.params;
         async.auto({
@@ -169,10 +174,12 @@ module.exports = () => {
             },
             show: ['find', (done, results) => {
                 const data = (results.find);
+                
                 if (!data) {
                     done(true);
                     return res.json({Err:"Attendance not found!"});
-                }
+                };
+
                 done(null, true);
                 return res.json(data);
             }]

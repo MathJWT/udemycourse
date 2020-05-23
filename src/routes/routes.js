@@ -59,7 +59,7 @@ route.put('/insurance/:attendance_id/update', insuranceController.update);
 
 route.get('/insurance/:insurance_id/show', insuranceController.show);
 route.get('/insurance/index', insuranceController.index);
-route.delete('/attendance/:attendance_id/delete', insuranceController.delet);
+route.delete('/insurance/:insurance_id/delete', insuranceController.delet);
 // route.post('/insurance/insert/:patient_id'); 
 // route.post('/insurance/insert/:attendance_id');
 // route.put('/insurance/:attendance_id/update', attendanceController.updateAttendance);
