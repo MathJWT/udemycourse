@@ -77,8 +77,6 @@ module.exports = () => {
 
     const update = (req, res) => {
         const { patient_id } = req.params;
-        let { name = null, email = null, cpf = null, age = null } = req.body;
-        const previousPatientData = [ name, email, cpf, age];
 
         async.auto({
             findPatient: (done) => {
@@ -88,44 +86,28 @@ module.exports = () => {
             },
             validFields: ['findPatient', (done, results) => {
                 if (!results.findPatient){ 
-                done(true);
-                return res.json({Error: 'Patient not found!'})
-            };
-                const previousName = results.findPatient.name;
-                const previousEmail = results.findPatient.email;
-                const previousCpf = results.findPatient.cpf;
-                const previousAge = results.findPatient.age;
-
-                const attendanceData = [previousName, previousEmail, previousCpf, previousAge];
-            
-                done(null, attendanceData);
-                }],
-            update: ['findPatient', 'validFields', (done, results) => {
-                if (!results.findPatient || !results.validFields.length > 0) return res.status(401).json({Err: 'Attendance or the fields are invalid!'});
+                    done(true);
+                    return res.json({Error: 'Patient not found!'})
+                };
                 
-                for (let index = 0; index < previousPatientData.length; index++) {
-                    if (index == 0 && !previousPatientData[0]) {
-                        name = results.validFields[0];
-                    };
-                    
-                    if (index == 1 && !previousPatientData[1]) {
-                        email = results.validFields[1];
-                    };
-                    
-                    if (index == 2 && !previousPatientData[2]) {
-                        cpf = results.validFields[2];
-                    }; 
-
-                    if (index == 3 && !previousPatientData[3]) {
-                        age = results.validFields[3];
-                    }; 
+                const { name = results.findPatient.name, email = results.findPatient.email, cpf = results.findPatient.cpf, age = results.findPatient.age } = req.body;
+                
+                if (name == results.findPatient.name && email == results.findPatient.email && cpf == results.findPatient.cpf && age == results.findPatient.age) {
+                    done(true);
+                    return res.json({Error: 'Patient cant be updated with the same data set up.'})
                 };
 
+                const patientData = [name, email, cpf, age]
+                done(null, patientData);
+            }],
+            update: ['findPatient', 'validFields', (done, results) => {
+                if (!results.findPatient || results.validFields.length == 0) return res.status(401).json({Err: 'Attendance or the fields are invalid!'});
+                
                 Patient.update({
-                    name,
-                    email,
-                    cpf,
-                    age
+                    name: results.validFields[0],
+                    email: results.validFields[1],
+                    cpf: results.validFields[2],
+                    age: results.validFields[3]
                 }, {
                     where: {
                         id: patient_id
@@ -133,7 +115,7 @@ module.exports = () => {
                 })
                 .then(response => done(null, response))
                 .catch((err) => done(err));
-                }],
+            }],
             showData: ['update',(done, results) => {
                 if (!results.update) {
                     done(true);
@@ -174,7 +156,7 @@ module.exports = () => {
             store: ['companyExists', 'patientExists', (done, results) => {
                 if (results.patientExists) {
                     done(true);
-                    return res.status(401).json({Error: 'Patient already exists! '})
+                    return res.status(401).json({Error: 'Patient already exists!'});
                 };
 
                 Patient.create({

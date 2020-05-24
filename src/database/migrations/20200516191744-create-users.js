@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      return queryInterface.createTable('users', { //Create it ! = as i finish, i need to set - npx sequelize db:migrate
+      return queryInterface.createTable('users', { //Create: = as i finish, i need to set - npx sequelize db:migrate
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,

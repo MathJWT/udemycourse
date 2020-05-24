@@ -99,6 +99,50 @@ module.exports = () => {
 
     const update = (req, res) => {
         const { insurance_id } = req.params;
+        async.auto({
+            find: (done) => {
+                Insurance.findByPk(insurance_id)
+                .then(response => done(null, response))
+                .catch(err => done(err))
+            },
+            update: ['find', (done, results) => {
+                if (!results.find) {
+                    done(true);
+                    return res.json({Error: 'Insurance not found!'});
+                };
+
+                const { name = results.find.name, plan = results.find.plan} = req.body;
+                
+                if (name == results.find.name && plan == results.find.plan) {
+                    done(true);
+                    return res.json({Error: "The insurance can't be updated with the same data."})
+                }
+                
+                console.log(results.find)
+                Insurance.update(
+                    {
+                        name,
+                        plan
+                    },
+                    {
+                        where: {
+                            id: insurance_id
+                        }
+                    }
+                )
+                .then(response => done(null, response))
+                .catch(error => done(null, error));
+            }],
+            show: ['find', 'update', (done, results) => {
+                if (results.update.length == 0) {
+                    done(true);
+                    return res.json({Error: 'Insurance was not updated!'});
+                };
+
+                done(null, true);
+                return res.json(results.update)
+            }]
+        })
         
     };
 

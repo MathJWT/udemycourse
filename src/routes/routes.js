@@ -55,7 +55,7 @@ route.delete('/attendance/:attendance_id/delete', attendanceController.delet);
 //Insurance routes
 route.post('/insurance/store', insuranceController.store);
 
-route.put('/insurance/:attendance_id/update', insuranceController.update);
+route.put('/insurance/:insurance_id/update', insuranceController.update);
 
 route.get('/insurance/:insurance_id/show', insuranceController.show);
 route.get('/insurance/index', insuranceController.index);

@@ -9,6 +9,7 @@ Insurance.init({
     name: Sequelize.STRING,
     plan: Sequelize.STRING
 }, {
+    paranoid: true,
     sequelize,
     tableName: 'insurances',
     modelName: 'Insurance'
