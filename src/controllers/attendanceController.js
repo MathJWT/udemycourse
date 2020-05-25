@@ -40,10 +40,21 @@ module.exports = () => {
     };
 
     const index = (req, res) => {
+        // const pageSize = 10;
+        // const { page = 0 } = req.body.page -1
+        // let defaultOffset = pageSize * page;
+        const pageSize = 10;
+        let page = 0;
+        let defaultOffset = pageSize * page;
+
+
         async.auto({
             findAll: (done) => {
                 Attendance.findAndCountAll({
-                    limit: 11,
+                    offset: defaultOffset,
+                    limit: pageSize,
+                    raw: true,
+                    attributes: ['id', 'procedure', 'date', 'price']
                 })
                 .then(response => done(null, response))
                 .catch(err => done(err));
@@ -53,9 +64,11 @@ module.exports = () => {
                 if (result.length == 0) {
                     done(true);
                     return res.json({Error: "Results weren't found!"})
-                }
+                };
                 
-               return res.json(result);
+                done(null, true)
+                result.page = page + 1; //Inserting an attribute into the findAll object
+                return res.json(result);
             }]
         })
     };

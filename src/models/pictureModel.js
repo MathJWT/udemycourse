@@ -17,12 +17,13 @@ class Picture extends Sequelize.Model {
             sequelize,
             paranoid: true,
             tableName: 'pictures',
+            modelName: 'pictures'
         });
         return this;
     };
 
     static Associate(models) {
-        this.belongsTo(models.Patient, {foreignKey: 'patient_id', as: 'picture-patients'})
+        this.belongsTo(models.patients, {foreignKey: 'patient_id', as: 'picture-patients'})
     };
 };
 

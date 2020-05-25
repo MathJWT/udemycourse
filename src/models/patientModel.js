@@ -11,14 +11,15 @@ class Patient extends Sequelize.Model {
         },{
             sequelize,
             paranoid: true,
-            tableName: 'patients'
+            tableName: 'patients',
+            modelName: 'patients'
         });
         return this;
     };
 
     static Associate(models) {
-        this.belongsTo(models.Company, {foreignKey: 'company_id', as: 'patient-companies'})
-        this.hasMany(models.Picture, { foreignKey: 'patient_id', as: 'patient-pictures' })
+        this.belongsTo(models.companies, {foreignKey: 'company_id', as: 'patient-companies'})
+        this.hasMany(models.pictures, { foreignKey: 'patient_id', as: 'patient-pictures' })
     };
 
     validFields(patient_name, patient_email, patient_age) {

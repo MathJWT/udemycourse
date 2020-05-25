@@ -12,13 +12,14 @@ class User extends Sequelize.Model {
         },{
             sequelize,
             paranoid: true,
-            tableName: 'users'
+            tableName: 'users',
+            modelName: 'users'
         });
         return this;
     };
 
     static Associate(models) {
-        this.belongsToMany(models.Company, { foreignKey: 'user_id', through: 'members', as: 'companies' })
+        this.belongsToMany(models.companies, { foreignKey: 'user_id', through: 'members', as: 'companies' })
     }
 
     comparePassword(password, hashedPassword) {

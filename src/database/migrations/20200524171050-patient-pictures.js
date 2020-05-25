@@ -1,36 +1,26 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-      return queryInterface.createTable('attendances', { 
-          id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            allowNull: false,
-            primaryKey: true
+    up: (queryInterface, Sequelize) => {
+        return queryInterface.createTable('pictures', { 
+            id: {
+                type: Sequelize.INTEGER,
+                allowNull: true,
+                primaryKey: true,
+                autoIncrement: true,
             },
-            procedure: {
+            originalname: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            price: {
-                type: Sequelize.FLOAT,
+            filename: {
+                type: Sequelize.STRING,
                 allowNull: false,
             },
             patient_id: {
-                type: Sequelize.INTEGER,
                 allowNull: false,
-                references: { model: 'patients', key: 'id' }
-            },
-            date: {
-                type: Sequelize.DATE,
-                allowNull: false,
-                defaultValue: new Date()
-            },
-            insurance_id: {
-                allowNull: true,
                 type: Sequelize.INTEGER,
-                references: { model: 'insurance', key: 'id' },
+                references: {model: 'patients', key: 'id'},
                 onUpdate: 'CASCADE',
                 onDelete: 'CASCADE'
             },
@@ -53,6 +43,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('attendances');
-    },
+      return queryInterface.dropTable('users');
+  }
 };

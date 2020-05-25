@@ -1,10 +1,6 @@
 const Sequelize = require('sequelize');
 
 class Company extends Sequelize.Model {
-    consctructor(body) {
-        this.body = body;
-    }
-    
     static init(sequelize) {
         super.init({
             name: Sequelize.STRING,
@@ -12,13 +8,14 @@ class Company extends Sequelize.Model {
             tableName: 'companies',
             sequelize,
             paranoid: true,
+            modelName: 'companies',
         });
         return this;
     };
 
     static Associate(models) {
-        this.belongsToMany(models.User, { foreignKey: 'company_id', through: 'members', as: 'users' })
-        this.hasMany(models.Patient, {foreignKey: 'company_id', as: 'company-patients'})
+        this.belongsToMany(models.users, { foreignKey: 'company_id', through: 'members', as: 'users' })
+        this.hasMany(models.patients, {foreignKey: 'company_id', as: 'company-patients'})
     }
 
 }

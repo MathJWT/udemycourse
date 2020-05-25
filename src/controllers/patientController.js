@@ -43,12 +43,12 @@ module.exports = () => {
                     limit: pageSize,
                     raw: true,
                     attributes: ['id', 'name', 'age', 'email'],
-            })
+                })
                 .then(response => done(null, response))
                 .catch(err => done(err));
             },
             show: ['find', (done, results) => {
-                if (!results.find) {
+                if (results.find.length == 0) {
                     done(true);
                     return res.status(401).json({Error: "Patients weren't found!"});
                 };
@@ -90,9 +90,9 @@ module.exports = () => {
                     return res.json({Error: 'Patient not found!'})
                 };
                 
-                const { name = results.findPatient.name, email = results.findPatient.email, cpf = results.findPatient.cpf, age = results.findPatient.age } = req.body;
+                const { name = results.findPatient.name, email = results.findPatient.email, cpf = results.findPatient.cpf, age = results.findPatient.age, insurance_id = results.findPatient.insurance_id} = req.body;
                 
-                if (name == results.findPatient.name && email == results.findPatient.email && cpf == results.findPatient.cpf && age == results.findPatient.age) {
+                if (name == results.findPatient.name && email == results.findPatient.email && cpf == results.findPatient.cpf && age == results.findPatient.age && insurance_id == results.findPatient.insurance_od) {
                     done(true);
                     return res.json({Error: 'Patient cant be updated with the same data set up.'})
                 };

@@ -4,13 +4,18 @@ const Attendance = require('../models/attendanceModel');
 const async = require('async');
 const Op = require('sequelize').Op;
 
+// INSURANCE (1 - N) PATIENT 
+// INSURANCE (1 - N) ATTENDANCE 
 
 module.exports = () => {
     const store = (req, res) => {
         const { name = null, plan } = req.body;
+        // const InsuranceClass = new Insurance(req.body);
+        // InsuranceClass.validFields();
         async.auto({
             find: (done) => {
                 Insurance.findOne({
+                    raw: true,
                     where: {
                         name,
                         plan 
@@ -30,16 +35,20 @@ module.exports = () => {
                 done(null, true);
             }],
             create: ['find', 'userExists', (done, results) => {
+                if (!results.userExists) {
+                    done(true);
+                    return res.json({Error: "Patient does not exist!"})
+                };
+
                 Insurance.create({
                     name,
                     plan
-                })
+                }, { raw: true })
                 .then(resp => done(null, resp))
                 .catch(err => done(err));
             }],
             show: ['find', 'userExists', 'create', (done, results) => {
                 const created = results.create;
-                
                 if (!created) {
                     done(true);
                     return res.json(null);

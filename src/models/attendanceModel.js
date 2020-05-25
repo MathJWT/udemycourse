@@ -16,7 +16,7 @@ class Attendance extends Sequelize.Model {
     };
 
     static Associate(models) {
-        this.belongsTo(models.Patient, {foreignKey: 'patient_id', as: 'attendance-patient'});
+        this.belongsTo(models.patients, {foreignKey: 'patient_id', as: 'attendance-patient'});
     };
 
     validFields(data) {
