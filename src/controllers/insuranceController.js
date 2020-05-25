@@ -193,7 +193,7 @@ module.exports = () => {
                     return res.json({Err: 'Something Happened and the Insurance wasnt deleted!'})
                 }                
 
-                return res.json(null)
+                return res.json(null);
             }]
         })
 
