@@ -121,12 +121,8 @@ module.exports = () => {
         })
         .then(data => getData(data))
         .catch(e => res.json(e));
-        
-        function getData(data) {
-            return res.json(data);
-        };
 
-        return
+        
     }
 
     return {

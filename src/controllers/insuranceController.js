@@ -20,8 +20,7 @@ module.exports = () => {
                         name,
                         plan 
                     }
-                })
-                .then(resp => done(null, resp))
+                }).then(resp => done(null, resp))
                 .catch(err => done(err));
             },
             userExists: ['find', (done, results) => {
